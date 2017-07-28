@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<head>
+   <html>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+   
+      <script type="text/javascript">
+		  
+		 
+		 var socket = io.connect('http://localhost:7678');
+         var watchID;
+         var geoLoc;
+         
+         function showLocation(position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            	
+			 socKets(latitude,longitude);
+         }
+			  function getLocationUpdate(){
+            if(navigator.geolocation){
+               
+               geoLoc = navigator.geolocation;
+               watchID = geoLoc.watchPosition(showLocation, errorHandler);
+            }
+            
+            else{
+               alert("Sorry, browser does not support geolocation!");
+            }
+         }
+         
+         function errorHandler(err) {
+            if(err.code == 1) {
+               alert("Error: Access is denied!");
+            }
+            
+            else if( err.code == 2) {
+               alert("Error: Position is unavailable!");
+            }
+         }
+         
+        
+		  function socKets(latitude,longitude){
+   // alert("Latitude : " + latitude + " Longitude: " + longitude);
+			  socket.emit('send',{latitude:latitude,longitude:longitude});
+			  
+	
+		  }
+		  
+		   
+      </script>
+      
+   
+   <body>
+   
+      <form>
+         <input type="button" onclick="getLocationUpdate();" value="Start"/>
+      </form>
+      
+   </body>
+</html>
